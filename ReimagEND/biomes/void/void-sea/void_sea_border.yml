@@ -1,0 +1,14 @@
+id: VOID_SEA_BORDER
+type: BIOME
+extends: [ VOID_SEA ]
+vanilla: minecraft:the_void
+color: $biomes/colors.yml:VOID_SEA_BORDER
+
+features:
+  preprocessors:
+    - VOID_SEA_AIR
+
+colors:
+  water: 0x000000
+  water-fog: 0x000000
+

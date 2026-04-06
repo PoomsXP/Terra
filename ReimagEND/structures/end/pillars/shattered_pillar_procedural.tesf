@@ -1,0 +1,31 @@
+num length = 7 + randomInt(5);
+num yTranslate = -3;
+str mainBlock = "minecraft:obsidian";
+
+num endCrystalChance = 10;
+
+num radius = 1;
+if (randomInt(3) == 0) {
+    radius = 1.25;
+    length = length + randomInt(4);
+}
+
+for (num y = 0; y < length ; y = y + 1) {
+    for (num x = -radius; x < radius; x = x + 1) {
+        for (num z = -radius; z < radius; z = z + 1) {
+            if(getBlock(x, yTranslate + y, z) != "minecraft:air" &&
+            getBlock(x, yTranslate + y, z) != "minecraft:end_stone") fail;
+            if (pow(x,2) + pow(z,2) < pow(radius,2)) {
+                block(x, yTranslate + y, z, mainBlock);
+            }
+        }
+    }
+}
+
+if(randomInt(endCrystalChance) == 0) {
+    if (radius == 1.25) {
+        entity(0.5, length + yTranslate + 1, 0.5, "minecraft:end_crystal");
+    } else {
+        entity(0, length + yTranslate, 0, "minecraft:end_crystal");
+    }
+}

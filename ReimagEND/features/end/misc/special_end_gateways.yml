@@ -1,0 +1,39 @@
+id: SPECIAL_END_GATEWAYS
+type: FEATURE
+
+distributor:
+  type: AND
+  distributors:
+    - type: SAMPLER
+      sampler:
+        type: EXPRESSION
+        expression: |
+          if( radius != 0, max(circle(radius, x+noise(x,z)-1, z+noise(x,z)-1, 1),circle(radius, x+noise(x,z)-1, z+noise(x,z)-1, 0.5)), -1)
+        variables:
+          radius: ${customization.yml:end-gateway-min}
+        functions:
+          circle:    {arguments: [r, x, z, l], expression: "if(x*x+z*z>r*r,-1,l)"}
+        samplers:
+          noise:
+            type: OPEN_SIMPLEX_2
+            dimensions: 2
+            salt: 3912
+            frequency: 0.1
+    - type: PADDED_GRID
+      width: 200
+      padding: 700
+      salt: 5462
+  
+locator:
+  type: AND
+  locators:
+    - type: RANDOM
+      height:
+        min: ${meta.yml:top-y} - 1
+        max: $meta.yml:top-y
+      amount: 1
+
+structures:
+  distribution:
+    type: CONSTANT
+  structures: place_special_end_gateway

@@ -1,0 +1,9 @@
+for (num i = 0; i < 10; i = i + 1) {
+    if (getBlock(0, -i - 1, 0) != "minecraft:air" &&
+        getBlock(0, -i - 1, 0) != "minecraft:end_stone_bricks" &&
+        getBlock(0, -i - 1, 0) != "minecraft:deepslate_bricks") {
+        block(0, -i, 0, "minecraft:chest");
+                loot(0, -i, 0, "minecraft:chests/end_city_treasure");
+        fail;
+    }
+}

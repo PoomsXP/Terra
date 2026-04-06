@@ -1,0 +1,20 @@
+id: VOID_SEA_AIR
+type: FEATURE
+
+distributor:
+  type: "YES"
+
+locator:
+  type: PATTERN
+  range: &range
+    min: $meta.yml:bottom-y
+    max: $meta.yml:top-y
+  pattern:
+    type: MATCH_AIR
+    offset: 0
+    
+structures:
+  distribution:
+    type: CONSTANT
+  structures: BLOCK:minecraft:light[level=0]
+

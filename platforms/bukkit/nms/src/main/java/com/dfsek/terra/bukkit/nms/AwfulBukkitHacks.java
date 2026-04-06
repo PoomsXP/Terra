@@ -8,9 +8,8 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.level.biome.Biome;
 import org.bukkit.NamespacedKey;
 import org.slf4j.Logger;
@@ -34,7 +33,7 @@ import com.dfsek.terra.registry.master.ConfigRegistry;
 public class AwfulBukkitHacks {
     private static final Logger LOGGER = LoggerFactory.getLogger(AwfulBukkitHacks.class);
 
-    private static final Map<ResourceLocation, List<ResourceLocation>> terraBiomeMap = new HashMap<>();
+    private static final Map<Identifier, List<Identifier>> terraBiomeMap = new HashMap<>();
 
     public static void registerBiomes(ConfigRegistry configRegistry) {
         try {
@@ -50,7 +49,7 @@ public class AwfulBukkitHacks {
                     BukkitPlatformBiome platformBiome = (BukkitPlatformBiome) biome.getPlatformBiome();
 
                     NamespacedKey vanillaBukkitKey = platformBiome.getHandle().getKey();
-                    ResourceLocation vanillaMinecraftKey = ResourceLocation.fromNamespaceAndPath(vanillaBukkitKey.getNamespace(),
+                    Identifier vanillaMinecraftKey = Identifier.fromNamespaceAndPath(vanillaBukkitKey.getNamespace(),
                         vanillaBukkitKey.getKey());
 
                     VanillaBiomeProperties vanillaBiomeProperties = biome.getContext().get(VanillaBiomeProperties.class);
@@ -58,7 +57,7 @@ public class AwfulBukkitHacks {
                     Biome platform = NMSBiomeInjector.createBiome(biomeRegistry.get(vanillaMinecraftKey).orElseThrow().value(),
                         vanillaBiomeProperties);
 
-                    ResourceLocation delegateMinecraftKey = ResourceLocation.fromNamespaceAndPath("terra",
+                    Identifier delegateMinecraftKey = Identifier.fromNamespaceAndPath("terra",
                         NMSBiomeInjector.createBiomeID(pack, key));
                     NamespacedKey delegateBukkitKey = NamespacedKey.fromString(delegateMinecraftKey.toString());
                     ResourceKey<Biome> delegateKey = ResourceKey.create(Registries.BIOME, delegateMinecraftKey);
@@ -69,13 +68,7 @@ public class AwfulBukkitHacks {
                     platformBiome.getContext().put(new BukkitBiomeInfo(delegateBukkitKey));
                     platformBiome.getContext().put(new NMSBiomeInfo(delegateKey));
 
-                    Map<ResourceKey<Biome>, ResourceKey<VillagerType>> villagerMap = Reflection.VILLAGER_TYPE.getByBiome();
-
-                    villagerMap.put(delegateKey,
-                        Objects.requireNonNullElse(vanillaBiomeProperties.getVillagerType(),
-                            villagerMap.getOrDefault(delegateKey, VillagerType.PLAINS)));
-
-                    terraBiomeMap.computeIfAbsent(vanillaMinecraftKey, i -> new ArrayList<>()).add(delegateKey.location());
+                    terraBiomeMap.computeIfAbsent(vanillaMinecraftKey, i -> new ArrayList<>()).add(delegateKey.identifier());
 
                     LOGGER.debug("Registered biome: " + delegateKey);
                 } catch(NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
@@ -100,8 +93,8 @@ public class AwfulBukkitHacks {
                             tb -> NMSBiomeInjector.getEntry(biomeRegistry, tb).ifPresentOrElse(
                                 terra -> {
                                     LOGGER.debug("{} (vanilla for {}): {}",
-                                        vanilla.unwrapKey().orElseThrow().location(),
-                                        terra.unwrapKey().orElseThrow().location(),
+                                        vanilla.unwrapKey().orElseThrow().identifier(),
+                                        terra.unwrapKey().orElseThrow().identifier(),
                                         vanilla.tags().toList());
                                     vanilla.tags()
                                         .forEach(tag -> collect
@@ -161,4 +154,3 @@ public class AwfulBukkitHacks {
             entry -> Reflection.HOLDER_REFERENCE.invokeBindTags(entry, Set.of()));
     }
 }
-

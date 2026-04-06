@@ -1,0 +1,55 @@
+id: TWISTING_BEANSTALKS
+type: FEATURE
+
+distributor:
+  type: AND
+  distributors:
+    - type: PADDED_GRID
+      width: 9
+      padding: 4
+      salt: 7589
+    - type: SAMPLER
+      sampler:
+        type: PROBABILITY
+        sampler:
+          type: OPEN_SIMPLEX_2
+          salt: 8679
+      threshold: 0.7
+
+locator:
+  type: AND
+  locators:
+    - type: SURFACE
+      range: &range
+        min: $meta.yml:bottom-y
+        max: ${meta.yml:top-y} - 30
+    - type: PATTERN
+      range: *range
+      pattern:
+        type: AND
+        patterns:
+          - type: MATCH_SET
+            blocks: $features/meta.yml:end-plantable-blocks
+            offset: -1
+          - type: MATCH
+            block: minecraft:end_stone
+            offset: -3
+          - type: MATCH
+            block: minecraft:air
+            offset: 0
+          - type: MATCH
+            block: minecraft:air
+            offset: 3
+          - type: MATCH
+            block: minecraft:air
+            offset: 6
+          - type: MATCH
+            block: minecraft:air
+            offset: 9
+
+structures:
+  distribution:
+    type: WHITE_NOISE
+  structures:
+    - twisting_beanstalk_procedural: 1
+    - blank: 2

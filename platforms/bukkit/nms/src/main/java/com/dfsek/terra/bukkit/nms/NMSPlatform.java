@@ -2,15 +2,12 @@ package com.dfsek.terra.bukkit.nms;
 
 import com.dfsek.tectonic.api.TypeRegistry;
 import com.dfsek.tectonic.api.exception.LoadException;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.npc.VillagerType;
-import net.minecraft.world.level.biome.AmbientAdditionsSettings;
-import net.minecraft.world.level.biome.AmbientMoodSettings;
-import net.minecraft.world.level.biome.AmbientParticleSettings;
+import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.level.biome.Biome.Precipitation;
 import net.minecraft.world.level.biome.Biome.TemperatureModifier;
 import net.minecraft.world.level.biome.BiomeSpecialEffects.GrassColorModifier;
@@ -27,9 +24,6 @@ import com.dfsek.terra.api.event.functional.FunctionalEventHandler;
 import com.dfsek.terra.api.world.biome.PlatformBiome;
 import com.dfsek.terra.bukkit.PlatformImpl;
 import com.dfsek.terra.bukkit.TerraBukkitPlugin;
-import com.dfsek.terra.bukkit.nms.config.BiomeAdditionsSoundTemplate;
-import com.dfsek.terra.bukkit.nms.config.BiomeMoodSoundTemplate;
-import com.dfsek.terra.bukkit.nms.config.BiomeParticleConfigTemplate;
 import com.dfsek.terra.bukkit.nms.config.EntityTypeTemplate;
 import com.dfsek.terra.bukkit.nms.config.MusicSoundTemplate;
 import com.dfsek.terra.bukkit.nms.config.SoundEventTemplate;
@@ -52,8 +46,8 @@ public class NMSPlatform extends PlatformImpl {
     public void register(TypeRegistry registry) {
         super.register(registry);
         registry.registerLoader(PlatformBiome.class, (type, o, loader, depthTracker) -> parseBiome((String) o, depthTracker))
-            .registerLoader(ResourceLocation.class, (type, o, loader, depthTracker) -> {
-                ResourceLocation identifier = ResourceLocation.tryParse((String) o);
+            .registerLoader(Identifier.class, (type, o, loader, depthTracker) -> {
+                Identifier identifier = Identifier.tryParse((String) o);
                 if(identifier == null)
                     throw new LoadException("Invalid identifier: " + o, depthTracker);
                 return identifier;
@@ -67,10 +61,7 @@ public class NMSPlatform extends PlatformImpl {
                 (type, o, loader, depthTracker) -> TemperatureModifier.valueOf(((String) o).toUpperCase(
                     Locale.ROOT)))
             .registerLoader(MobCategory.class, (type, o, loader, depthTracker) -> MobCategory.valueOf((String) o))
-            .registerLoader(AmbientParticleSettings.class, BiomeParticleConfigTemplate::new)
             .registerLoader(SoundEvent.class, SoundEventTemplate::new)
-            .registerLoader(AmbientMoodSettings.class, BiomeMoodSoundTemplate::new)
-            .registerLoader(AmbientAdditionsSettings.class, BiomeAdditionsSoundTemplate::new)
             .registerLoader(Music.class, MusicSoundTemplate::new)
             .registerLoader(EntityType.class, EntityTypeTemplate::new)
             .registerLoader(SpawnCostConfig.class, SpawnCostConfig::new)
@@ -91,6 +82,15 @@ public class NMSPlatform extends PlatformImpl {
             .global();
 
         return internalAddon;
+    }
+
+    @Override
+    public boolean reload() {
+        boolean succeed = super.reload();
+        if(succeed) {
+            AwfulBukkitHacks.registerBiomes(this.getRawConfigRegistry());
+        }
+        return succeed;
     }
 
     @Override

@@ -1,0 +1,30 @@
+id: BASE_AETHER
+type: BIOME
+abstract: true
+extends:
+  - ORES_DEFAULT
+  - DEPOSITS_DEFAULT
+  - CARVING_AETHER
+
+tags:
+  - AETHER
+
+# Overworld Atmosphere
+colors:
+  grass: 0x91BD59
+  foliage: 0x77AB2F
+#  fog: 0xc8e8e7
+#  water: 0xbadfe6
+#  water-fog: 0xbadfe6
+#  sky: 0xc8e8e7
+
+features:
+  preprocessors:
+    - SKY_LAYER
+    - CLOUD_LAYER
+    - CLOUDS
+  buildings:
+    - TOWER_RUINS
+    - MINESHAFTS
+    - ABANDONED_HOUSES
+    - MOB_ROOMS

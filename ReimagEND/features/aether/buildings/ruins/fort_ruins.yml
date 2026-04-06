@@ -1,0 +1,31 @@
+id: FORT_RUINS
+type: FEATURE
+
+distributor:
+  type: PADDED_GRID
+  width: 257
+  padding: 148
+  salt: 5467
+
+locator:
+  type: AND
+  locators:
+    - type: TOP
+      range: &range
+        min: $meta.yml:bottom-y
+        max: ${meta.yml:top-y} - 30
+    - type: PATTERN
+      range: *range
+      pattern:
+        type: MATCH_AIR
+        offset: 0
+    - type: PATTERN
+      range: *range
+      pattern:
+        type: MATCH_SOLID
+        offset: -1
+
+structures:
+  distribution:
+    type: CONSTANT
+  structures: place_fort_ruin

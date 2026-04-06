@@ -1,0 +1,33 @@
+id: SKY_WATER_COLUMNS
+type: FEATURE
+
+distributor:
+  type: SAMPLER
+  sampler:
+    type: POSITIVE_WHITE_NOISE
+    salt: 3277
+  threshold: 0.5/164
+
+locator:
+  type: AND
+  locators:
+    - type: SURFACE
+      range: &range
+        min: $meta.yml:bottom-y
+        max: $meta.yml:top-y
+    - type: PATTERN
+      range: *range
+      pattern:
+        # Match air on top of lava
+        type: AND
+        patterns:
+          - type: MATCH
+            block: minecraft:water
+            offset: -1
+          - type: MATCH_AIR
+            offset: 0
+          
+structures:
+  distribution:
+    type: CONSTANT
+  structures: sky_water_column

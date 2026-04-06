@@ -1,0 +1,97 @@
+num height = 105+randomInt(20);
+num yTranslate = -70;
+num radius = 6+randomInt(2);
+
+str mainBlock = "minecraft:obsidian";
+str altBlock = "minecraft:crying_obsidian";
+
+str setBlock = mainBlock;
+num r = radius;
+for(num h = 0; h <= height; h = h + 1) {
+
+    for(num x = -r; x <= r; x = x + 1) {
+        for(num z = -r; z <= r; z = z + 1) {
+            if (pow(x,2)+pow(z,2) < pow(r,2)) {
+                setBlock = mainBlock;
+                if(round(randomInt(h+1)/10) == 0 && h < 60) setBlock = altBlock;
+                if(round(randomInt(h+1)/10) == 0 && h < 40) setBlock = "minecraft:air";
+                block(x, h + yTranslate, z, setBlock, true);
+            }    
+        }
+    }
+
+    if (h > (height/2) && h % 20 == 0) r = r - 1;
+
+}
+
+// Iron bars
+if (randomInt(3) == 0) {
+    for (num y = height; y < height+5; y = y + 1) {
+        for (num x = -3; x <= 3; x = x + 1) {
+            for (num z = -3; z <= 3; z = z + 1) {
+                // z-sides
+                if (x == 0 && (z == 2 || z == -2) && y > height) {
+                    block(x,y + yTranslate,z,"minecraft:iron_bars[east=true,west=true]");
+                    block(x+1,y + yTranslate,z,"minecraft:iron_bars[east=true,west=true]");
+                    block(x-1,y + yTranslate,z,"minecraft:iron_bars[east=true,west=true]");
+                }
+
+                // x-sides
+                if (z == 0 && (x == 2 || x == -2) && y > height) {
+                    block(x,y + yTranslate,z,"minecraft:iron_bars[north=true,south=true]");
+                    block(x,y + yTranslate,z+1,"minecraft:iron_bars[north=true,south=true]");
+                    block(x,y + yTranslate,z-1,"minecraft:iron_bars[north=true,south=true]");
+                }
+
+                // corners
+                if (z == 2 && x == 2 && y > height) {
+                    block(x,y + yTranslate,z,"minecraft:iron_bars[north=true,west=true]");
+                }
+
+                if (z == 2 && x == -2 && y > height) {
+                    block(x,y + yTranslate,z,"minecraft:iron_bars[north=true,east=true]");
+                }
+
+                if (z == -2 && x == 2 && y > height) {
+                    block(x,y + yTranslate,z,"minecraft:iron_bars[south=true,west=true]");
+                }
+
+                if (z == -2 && x == -2 && y > height) {
+                    block(x,y + yTranslate,z,"minecraft:iron_bars[south=true,east=true]");
+                }
+            }
+        }
+    }
+}
+
+// Top Spikes
+for(num y = height-5; y <= height+3; y = y + 1) {
+    setBlock = mainBlock;
+    block(-r, y + yTranslate, 0, setBlock);
+
+    setBlock = mainBlock;
+    block(0, y + yTranslate, -r, setBlock);
+
+    setBlock = mainBlock;
+    block(r, y + yTranslate, 0, setBlock);
+
+    setBlock = mainBlock;
+    block(0, y + yTranslate, r, setBlock);
+
+    if (y < height + 2) {
+        setBlock = mainBlock;
+        block(r-1, y + yTranslate, r-1, setBlock);
+
+        setBlock = mainBlock;
+        block(-r+1, y + yTranslate, -r+1, setBlock);
+
+        setBlock = mainBlock;
+        block(-r+1, y + yTranslate, r-1, setBlock);
+
+        setBlock = mainBlock;
+        block(r-1, y + yTranslate, -r+1, setBlock);
+    }
+}
+
+block(0, height + yTranslate + 1, 0, "minecraft:bedrock");
+entity(0, height + yTranslate + 2, 0, "minecraft:end_crystal");

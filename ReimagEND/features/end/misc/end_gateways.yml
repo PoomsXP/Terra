@@ -1,0 +1,22 @@
+id: END_GATEWAYS
+type: FEATURE
+
+distributor:
+  type: PADDED_GRID
+  width: 100
+  padding: 500
+  salt: 5678
+  
+locator:
+  type: AND
+  locators:
+    - type: RANDOM
+      height:
+        min: ${meta.yml:top-y} - 1
+        max: $meta.yml:top-y
+      amount: 1
+
+structures:
+  distribution:
+    type: CONSTANT
+  structures: place_end_gateway

@@ -1,0 +1,22 @@
+id: AETHER_AZURE_MEADOWS
+type: BIOME
+extends:
+  - BASE_AETHER
+  - MOB_AETHER
+  - EQ_AETHER_DEFAULT
+color: $biomes/colors.yml:AETHER_AZURE_MEADOWS
+vanilla: minecraft:the_end
+
+colors:
+  grass: 0x3ccfad
+  foliage: 0x3c79cf
+
+palette:
+  - GRASS: $meta.yml:top-y
+
+features:
+  flora:
+    - GRASS
+    - MIXED_FLOWER_COVER
+  trees:
+    - AZURE_TREES

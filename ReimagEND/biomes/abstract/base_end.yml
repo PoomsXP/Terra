@@ -1,0 +1,20 @@
+id: BASE_END
+type: BIOME
+abstract: true
+  
+colors:
+  grass: 0xdee6a4
+  water: 0x62529E
+  water-fog: 0x62529E
+  #fog: 0x000000
+  #sky: 0x000000
+
+features:
+  global-preprocessors:
+    - END_GATEWAYS
+    - SPECIAL_END_GATEWAYS
+  buildings:
+    - END_SHIPS
+    - CRASHED_END_SHIPS
+    - END_HOUSES
+    - SHULKER_NESTS

@@ -1,0 +1,39 @@
+id: ICY_ASTEROIDS
+type: FEATURE
+
+distributor:
+  type: AND
+  distributors:
+    - type: PADDED_GRID
+      width: 8
+      padding: 10
+      salt: 9367
+    - type: SAMPLER
+      sampler:
+        type: CELLULAR
+        return: CellValue
+        frequency: 0.05
+        salt: 5428
+      threshold: -0.01
+
+locator:
+  type: AND
+  locators:
+    - type: RANDOM
+      height: &range
+        min: ${meta.yml:top-y}/3
+        max: ${meta.yml:top-y} - 20
+      amount: 1
+      salt: 2346
+    - type: PATTERN
+      range: *range
+      pattern:
+        type: MATCH_AIR
+        offset: 0
+
+structures:
+  distribution:
+    type: WHITE_NOISE
+  structures: 
+    - icy_asteroid: 5
+    - spiky_ice_asteroid: 1

@@ -1,0 +1,23 @@
+id: AETHER_WISPY_ISLES
+type: BIOME
+extends:
+  - BASE_AETHER
+  - MOB_AETHER
+  - EQ_NARROW
+color: $biomes/colors.yml:AETHER_WISPY_ISLES
+vanilla: minecraft:the_end
+
+colors:
+  grass: 0x3ccfad
+  foliage: 0x9ed8de
+
+palette:
+  - GRASS: $meta.yml:top-y
+
+features:
+  flora:
+    - GRASS
+    - FERNS
+    - MIXED_FLOWER_COVER
+  trees:
+    - SPARSE_WISPY_TREES

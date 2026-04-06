@@ -1,0 +1,48 @@
+id: EQ_DEBRI
+type: BIOME
+abstract: true
+
+terrain:
+  sampler:
+    type: EXPRESSION
+    expression: |
+      -1+threshold+
+      lerp(y, max, 0, max-taper,
+        max(
+          lerp(y, min-undercarriageTranslate, 0, min-undercarriageTranslate+taper,
+              lerp(y, min-undercarriageTranslate, 0, min+10,
+                max((simplex(x,z)+1)/2,simplex3(x, y*flatness, z))
+              )
+          ),
+          lerp(y, min, 0, min+taper,
+            simplex3(x, (y-undercarriageTranslate), z) * undercarriageMask(x, y, z)
+          )
+        )
+      )
+    variables:
+      threshold: 0.3
+      max: ${customization.yml:island-max-height}
+      min: ${customization.yml:island-min-height}
+      taper: 5
+      flatness: 0
+      undercarriageTranslate: -10
+    samplers:
+      simplex3:
+        dimensions: 3
+        type: PROBABILITY
+        sampler:
+          type: FBM
+          octaves: 5
+          sampler:
+            type: OPEN_SIMPLEX_2
+            frequency: 0.5 / ${customization.yml:island-scale}
+      undercarriageMask:
+        dimensions: 3
+        type: PROBABILITY
+        sampler:
+          type: RIDGED
+          octaves: 3
+          gain: 1
+          sampler:
+            type: OPEN_SIMPLEX_2
+            frequency: 0.1 / ${customization.yml:island-scale}
