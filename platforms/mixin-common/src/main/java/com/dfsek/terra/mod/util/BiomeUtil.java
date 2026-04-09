@@ -1,11 +1,9 @@
 package com.dfsek.terra.mod.util;
 
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.Builder;
 import net.minecraft.world.biome.BiomeEffects;
-import net.minecraft.world.biome.GenerationSettings;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,63 +22,30 @@ public class BiomeUtil {
 
     public static Biome createBiome(Biome vanilla, VanillaBiomeProperties vanillaBiomeProperties) {
         BiomeEffects.Builder effects = new BiomeEffects.Builder();
+        BiomeEffects vanillaEffects = vanilla.getEffects();
 
         net.minecraft.world.biome.Biome.Builder builder = new Builder();
 
         effects.waterColor(Objects.requireNonNullElse(vanillaBiomeProperties.getWaterColor(), vanilla.getWaterColor()))
-            .waterFogColor(Objects.requireNonNullElse(vanillaBiomeProperties.getWaterFogColor(), vanilla.getWaterFogColor()))
-            .fogColor(Objects.requireNonNullElse(vanillaBiomeProperties.getFogColor(), vanilla.getFogColor()))
-            .skyColor(Objects.requireNonNullElse(vanillaBiomeProperties.getSkyColor(), vanilla.getSkyColor()))
             .grassColorModifier(
-                Objects.requireNonNullElse(vanillaBiomeProperties.getGrassColorModifier(), vanilla.getEffects().getGrassColorModifier()))
-            .musicVolume(Objects.requireNonNullElse(vanillaBiomeProperties.getMusicVolume(), vanilla.getMusicVolume()));
+                Objects.requireNonNullElse(vanillaBiomeProperties.getGrassColorModifier(), vanillaEffects.grassColorModifier()));
 
         if(vanillaBiomeProperties.getGrassColor() == null) {
-            vanilla.getEffects().getGrassColor().ifPresent(effects::grassColor);
+            vanillaEffects.grassColor().ifPresent(effects::grassColor);
         } else {
             effects.grassColor(vanillaBiomeProperties.getGrassColor());
         }
 
         if(vanillaBiomeProperties.getFoliageColor() == null) {
-            vanilla.getEffects().getFoliageColor().ifPresent(effects::foliageColor);
+            vanillaEffects.foliageColor().ifPresent(effects::foliageColor);
         } else {
             effects.foliageColor(vanillaBiomeProperties.getFoliageColor());
         }
 
         if(vanillaBiomeProperties.getDryFoliageColor() == null) {
-            vanilla.getEffects().getDryFoliageColor().ifPresent(effects::dryFoliageColor);
+            vanillaEffects.dryFoliageColor().ifPresent(effects::dryFoliageColor);
         } else {
             effects.dryFoliageColor(vanillaBiomeProperties.getDryFoliageColor());
-        }
-
-        if(vanillaBiomeProperties.getParticleConfig() == null) {
-            vanilla.getEffects().getParticleConfig().ifPresent(effects::particleConfig);
-        } else {
-            effects.particleConfig(vanillaBiomeProperties.getParticleConfig());
-        }
-
-        if(vanillaBiomeProperties.getLoopSound() == null) {
-            vanilla.getEffects().getLoopSound().ifPresent(effects::loopSound);
-        } else {
-            effects.loopSound(Registries.SOUND_EVENT.getEntry(vanillaBiomeProperties.getLoopSound()));
-        }
-
-        if(vanillaBiomeProperties.getMoodSound() == null) {
-            vanilla.getEffects().getMoodSound().ifPresent(effects::moodSound);
-        } else {
-            effects.moodSound(vanillaBiomeProperties.getMoodSound());
-        }
-
-        if(vanillaBiomeProperties.getAdditionsSound() == null) {
-            vanilla.getEffects().getAdditionsSound().ifPresent(effects::additionsSound);
-        } else {
-            effects.additionsSound(vanillaBiomeProperties.getAdditionsSound());
-        }
-
-        if(vanillaBiomeProperties.getMusic() == null) {
-            vanilla.getEffects().getMusic().ifPresent(effects::music);
-        } else {
-            effects.music(vanillaBiomeProperties.getMusic());
         }
 
         builder.precipitation(Objects.requireNonNullElse(vanillaBiomeProperties.getPrecipitation(), vanilla.hasPrecipitation()));
@@ -94,10 +59,11 @@ public class BiomeUtil {
             ((BiomeAccessor) ((Object) vanilla)).getWeather().temperatureModifier()));
 
         builder.spawnSettings(Objects.requireNonNullElse(vanillaBiomeProperties.getSpawnSettings(), vanilla.getSpawnSettings()));
+        builder.addEnvironmentAttributes(vanilla.getEnvironmentAttributes());
 
         return builder
             .effects(effects.build())
-            .generationSettings(new GenerationSettings.Builder().build())
+            .generationSettings(((BiomeAccessor) ((Object) vanilla)).getGenerationSettings())
             .build();
     }
 

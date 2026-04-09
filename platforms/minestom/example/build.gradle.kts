@@ -2,7 +2,24 @@ plugins {
     application
 }
 
+import org.gradle.api.JavaVersion
+import org.gradle.api.attributes.java.TargetJvmVersion
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
 val javaMainClass = "com.dfsek.terra.minestom.TerraMinestomExample"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
+}
+
+configurations.configureEach {
+    attributes.attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+}
 
 dependencies {
     shadedApi(project(":platforms:minestom"))

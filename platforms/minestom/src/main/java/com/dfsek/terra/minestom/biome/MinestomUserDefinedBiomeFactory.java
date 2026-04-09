@@ -41,28 +41,15 @@ public class MinestomUserDefinedBiomeFactory implements BiomeFactory {
         Key key = Key.key("terra", createBiomeID(pack, source.getID()));
 
         BiomeEffects.Builder effectsBuilder = BiomeEffects.builder()
-            .fogColor(mergeNullable(properties.getFogColor(), parentEffects.fogColor()))
-            .skyColor(mergeNullable(properties.getSkyColor(), parentEffects.skyColor()))
             .waterColor(mergeNullable(properties.getWaterColor(), parentEffects.waterColor()))
-            .waterFogColor(mergeNullable(properties.getWaterFogColor(), parentEffects.waterFogColor()))
             .foliageColor(mergeNullable(properties.getFoliageColor(), parentEffects.foliageColor()))
+            .dryFoliageColor(mergeNullable(properties.getDryFoliageColor(), parentEffects.dryFoliageColor()))
             .grassColor(mergeNullable(properties.getGrassColor(), parentEffects.grassColor()))
-            .grassColorModifier(mergeNullable(properties.getGrassColorModifier(), parentEffects.grassColorModifier()))
-            .biomeParticle(mergeNullable(properties.getParticleConfig(), parentEffects.biomeParticle()))
-            .ambientSound(mergeNullable(properties.getLoopSound(), parentEffects.ambientSound()))
-            .moodSound(mergeNullable(properties.getMoodSound(), parentEffects.moodSound()))
-            .additionsSound(mergeNullable(properties.getAdditionsSound(), parentEffects.additionsSound()))
-            // TODO music
-            .music(parentEffects.music())
-            .musicVolume(parentEffects.musicVolume());
-
-        if(effectsBuilder.build().equals(BiomeEffects.PLAINS_EFFECTS)) {
-            effectsBuilder.fogColor(new Color(0xC0D8FE)); // circumvent a minestom bug
-        }
+            .grassColorModifier(mergeNullable(properties.getGrassColorModifier(), parentEffects.grassColorModifier()));
 
         Biome target = Biome.builder()
             .downfall(mergeNullable(properties.getDownfall(), parent.downfall()))
-            .hasPrecipitation(mergeNullable(properties.getPrecipitation(), parent.hasPrecipitation()))
+            .precipitation(mergeNullable(properties.getPrecipitation(), parent.hasPrecipitation()))
             .temperature(mergeNullable(properties.getTemperature(), parent.temperature()))
             .temperatureModifier(mergeNullable(properties.getTemperatureModifier(), parent.temperatureModifier()))
             .effects(effectsBuilder.build())

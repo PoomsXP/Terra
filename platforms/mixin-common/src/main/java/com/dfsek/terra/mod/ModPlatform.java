@@ -18,7 +18,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.Precipitation;
 import net.minecraft.world.biome.Biome.TemperatureModifier;
 import net.minecraft.world.biome.BiomeEffects.GrassColorModifier;
-import net.minecraft.world.biome.BiomeParticleConfig;
 import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.biome.source.MultiNoiseBiomeSourceParameterList;
 import net.minecraft.world.dimension.DimensionType;
@@ -37,7 +36,6 @@ import com.dfsek.terra.api.handle.WorldHandle;
 import com.dfsek.terra.api.world.biome.PlatformBiome;
 import com.dfsek.terra.mod.config.BiomeAdditionsSoundTemplate;
 import com.dfsek.terra.mod.config.BiomeMoodSoundTemplate;
-import com.dfsek.terra.mod.config.BiomeParticleConfigTemplate;
 import com.dfsek.terra.mod.config.EntityTypeTemplate;
 import com.dfsek.terra.mod.config.MusicSoundTemplate;
 import com.dfsek.terra.mod.config.ProtoPlatformBiome;
@@ -87,7 +85,6 @@ public abstract class ModPlatform extends AbstractPlatform {
             .registerLoader(TemperatureModifier.class,
                 (type, o, loader, depthTracker) -> TemperatureModifier.valueOf(((String) o).toUpperCase()))
             .registerLoader(SpawnGroup.class, (type, o, loader, depthTracker) -> SpawnGroup.valueOf((String) o))
-            .registerLoader(BiomeParticleConfig.class, BiomeParticleConfigTemplate::new)
             .registerLoader(SoundEvent.class, SoundEventTemplate::new)
             .registerLoader(BiomeMoodSound.class, BiomeMoodSoundTemplate::new)
             .registerLoader(BiomeAdditionsSound.class, BiomeAdditionsSoundTemplate::new)

@@ -9,6 +9,7 @@ import net.minecraft.registry.ReloadableRegistries;
 import net.minecraft.registry.ServerDynamicRegistryType;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.featuretoggle.FeatureSet;
+import net.minecraft.command.permission.PermissionPredicate;
 import net.minecraft.server.DataPackContents;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.world.biome.Biome;
@@ -38,13 +39,14 @@ public class DataPackContentsMixin {
      */
     @Inject(method = "reload(Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/registry/CombinedDynamicRegistries;Ljava/util/List;" +
                      "Lnet/minecraft/resource/featuretoggle/FeatureSet;" +
-                     "Lnet/minecraft/server/command/CommandManager$RegistrationEnvironment;ILjava/util/concurrent/Executor;" +
+                     "Lnet/minecraft/server/command/CommandManager$RegistrationEnvironment;" +
+                     "Lnet/minecraft/command/permission/PermissionPredicate;Ljava/util/concurrent/Executor;" +
                      "Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;",
             at = @At("RETURN"))
     private static void injectReload(ResourceManager resourceManager,
                                      CombinedDynamicRegistries<ServerDynamicRegistryType> dynamicRegistries,
                                      List<PendingTagLoad<?>> pendingTagLoads, FeatureSet enabledFeatures,
-                                     CommandManager.RegistrationEnvironment environment, int functionPermissionLevel,
+                                     CommandManager.RegistrationEnvironment environment, PermissionPredicate permissionPredicate,
                                      Executor prepareExecutor,
                                      Executor applyExecutor, CallbackInfoReturnable<CompletableFuture<DataPackContents>> cir) {
         DynamicRegistryManager.Immutable dynamicRegistryManager = dynamicRegistries.getCombinedRegistryManager();

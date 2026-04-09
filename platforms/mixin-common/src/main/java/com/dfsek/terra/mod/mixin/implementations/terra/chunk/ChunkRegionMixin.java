@@ -27,10 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.tick.MultiTickScheduler;
+import net.minecraft.world.tick.QueryableTickScheduler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Implements;
 import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,31 +45,29 @@ import com.dfsek.terra.mod.util.MinecraftUtil;
 public abstract class ChunkRegionMixin implements StructureWorldAccess {
 
     @Shadow
-    @Final
-    private net.minecraft.world.chunk.Chunk centerPos;
+    public abstract ChunkPos getCenterPos();
 
     @Shadow
-    @Final
-    private ServerWorld world;
+    public abstract ServerWorld toServerWorld();
 
     @Shadow
-    @Final
-    private MultiTickScheduler<Block> blockTickScheduler;
+    public abstract QueryableTickScheduler<Block> getBlockTickScheduler();
 
     @Shadow
-    @Final
-    private MultiTickScheduler<Fluid> fluidTickScheduler;
+    public abstract QueryableTickScheduler<Fluid> getFluidTickScheduler();
+
+    @Shadow
+    public abstract net.minecraft.world.chunk.Chunk getChunk(int chunkX, int chunkZ);
 
     @Shadow
     public abstract net.minecraft.block.BlockState getBlockState(BlockPos pos);
 
     @Shadow
-    @Nullable
     public abstract boolean setBlockState(BlockPos pos, net.minecraft.block.BlockState state, int flags, int maxUpdateDepth);
 
 
     public void terraChunk$setBlock(int x, int y, int z, @NotNull BlockState data, boolean physics) {
-        ChunkPos pos = centerPos.getPos();
+        ChunkPos pos = getCenterPos();
         BlockPos blockPos = new BlockPos(CoordFunctions.chunkAndRelativeToAbsolute(pos.x, x), y,
             CoordFunctions.chunkAndRelativeToAbsolute(pos.z, z));
         net.minecraft.block.BlockState state;
@@ -82,9 +78,9 @@ public abstract class ChunkRegionMixin implements StructureWorldAccess {
             BlockStateArgument arg = ((BlockStateArgument) data);
             state = arg.getBlockState();
             setBlockState(blockPos, state, 0, 512);
-            net.minecraft.world.chunk.Chunk chunk = getChunk(blockPos);
+            net.minecraft.world.chunk.Chunk chunk = getChunk(pos.x, pos.z);
             NbtCompound nbt = ((NbtCompound) (Object) ((BlockStateExtended) data).getData());
-            MinecraftUtil.loadBlockEntity(chunk, world, blockPos, state, nbt);
+            MinecraftUtil.loadBlockEntity(chunk, toServerWorld(), blockPos, state, nbt);
         } else {
             state = (net.minecraft.block.BlockState) data;
             setBlockState(blockPos, state, 0, 512);
@@ -96,15 +92,16 @@ public abstract class ChunkRegionMixin implements StructureWorldAccess {
     }
 
     public @NotNull BlockState terraChunk$getBlock(int x, int y, int z) {
+        ChunkPos centerPos = getCenterPos();
         return (BlockState) ((ChunkRegion) (Object) this).getBlockState(
-            new BlockPos(x + (centerPos.getPos().x << 4), y, z + (centerPos.getPos().z << 4)));
+            new BlockPos(x + (centerPos.x << 4), y, z + (centerPos.z << 4)));
     }
 
     public int terraChunk$getX() {
-        return centerPos.getPos().x;
+        return getCenterPos().x;
     }
 
     public int terraChunk$getZ() {
-        return centerPos.getPos().z;
+        return getCenterPos().z;
     }
 }

@@ -31,9 +31,6 @@ import com.dfsek.terra.minestom.api.TerraMinestomWorldBuilder;
 import com.dfsek.terra.minestom.biome.MinestomBiomeLoader;
 import com.dfsek.terra.minestom.biome.MinestomUserDefinedBiomeFactory;
 import com.dfsek.terra.minestom.biome.MinestomUserDefinedBiomePool;
-import com.dfsek.terra.minestom.config.BiomeAdditionsSoundTemplate;
-import com.dfsek.terra.minestom.config.BiomeMoodSoundTemplate;
-import com.dfsek.terra.minestom.config.BiomeParticleConfigTemplate;
 import com.dfsek.terra.minestom.config.KeyLoader;
 import com.dfsek.terra.minestom.config.RGBLikeLoader;
 import com.dfsek.terra.minestom.config.SoundEventTemplate;
@@ -82,9 +79,6 @@ public final class TerraMinestomPlatform extends AbstractPlatform {
                 (TypeLoader<EntityType>) (annotatedType, o, configLoader, depthTracker) -> new MinestomEntityType((String) o))
             .registerLoader(BlockState.class,
                 (TypeLoader<BlockState>) (annotatedType, o, configLoader, depthTracker) -> worldHandle.createBlockState((String) o))
-            .registerLoader(BiomeEffects.Particle.class, BiomeParticleConfigTemplate::new)
-            .registerLoader(BiomeEffects.MoodSound.class, BiomeMoodSoundTemplate::new)
-            .registerLoader(BiomeEffects.AdditionsSound.class, BiomeAdditionsSoundTemplate::new)
             .registerLoader(SoundEvent.class, SoundEventTemplate::new);
     }
 
