@@ -1,0 +1,36 @@
+id: BASE
+type: BIOME
+abstract: true
+extends:
+  - DEPOSITS_DEFAULT
+  - ORES_DEFAULT
+
+slant-depth: 15
+
+ocean:
+  palette: BLOCK:minecraft:water
+  level: $meta.yml:ocean-level
+
+features:
+  global-preprocessors:
+    - LAVA_FLOOR
+    - UNDERGROUND_LAVA_COLUMNS
+    - CONTAIN_FLOATING_WATER
+    - CONTAIN_FLOATING_WATER_DEEPSLATE
+    - CAVE_GLOW_LICHEN
+    - TEXTURED_STONE_SLANT
+    - SPARSE_HORNITOS
+    - UNDERGROUND_WATER_LAKES
+    - UNDERGROUND_WATER_STREAMS
+    - UNDERGROUND_LAVA_LAKES
+    - UNDERGROUND_LAVA_STREAMS
+    - CAVE_ENTRANCES
+    - CAVE_CARVERS
+    - SPARSE_PROCEDURAL_COBWEBS
+  underwater-flora:
+    - KELP
+    - CLINGING_KELP
+    - SEAGRASS
+    - SPARSE_SEAGRASS
+  structures:
+    - MOB_ROOMS

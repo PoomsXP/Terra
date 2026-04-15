@@ -1,0 +1,2 @@
+num random = randomInt(3);
+block(0, 0, 0, "minecraft:suspicious_sand");

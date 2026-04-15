@@ -1,0 +1,19 @@
+id: ORANGE_DESERT
+type: BIOME
+extends: DESERT
+color: $biomes/colors.yml:ORANGE_DESERT
+
+tags:
+  - LAND_CAVES
+  - USE_ORANGE_DESERT_RIVER
+
+palette:
+  - RED_WHITE_SAND_MIX: $meta.yml:top-y
+  - << meta.yml:palette-bottom
+
+features:
+  structures:
+    - MOB_ROOMS
+    - SPARSE_FOSSILS
+  flora:
+    - DRY_GRASS

@@ -1,0 +1,153 @@
+id: OVERWORLD
+version: 2.0.0
+author: "Astrash, Sancires, Aureus, RogueShade"
+
+generator: NOISE_3D
+
+addons:
+  biome-provider-pipeline: "2.+"
+  biome-provider-single: "1.+"
+  biome-provider-extrusion: "1.+"
+  chunk-generator-noise-3d: "1.+"
+  config-biome: "1.+"
+  config-flora: "1.+"
+  config-noise-function: "1.+"
+  config-ore: "1.+"
+  config-palette: "1.+"
+  config-distributors: "1.+"
+  config-locators: "1.+"
+  config-feature: "1.+"
+  config-number-predicate: "1.+"
+  structure-terrascript-loader: "1.+"
+  structure-sponge-loader: "1.+"
+  language-yaml: "1.+"
+  generation-stage-feature: "1.+"
+  structure-function-check-noise-3d: "1.+"
+  palette-block-shortcut: "1.+"
+  structure-block-shortcut: "1.+"
+  terrascript-function-sampler: "1.+"
+  locator-slant-noise-3d: "1.+"
+
+# ---
+# Biome distribution
+# ---
+# Several preset biome providers are available to choose from below.
+
+# To pick a different preset you can uncomment the line starting with 'biomes:'
+# under the preset name, and comment the old preset that was previously set.
+# (Not commenting the old one will result in an error!)
+
+# Default biome distribution
+biomes: $biome-distribution/presets/default.yml:biomes
+
+# Single biome - Generates a single biome, as well as other complementary biomes such as cave and river biomes.
+#                It is recommended to disable 'terrain-factor-continental' in customization.yml when using this preset.
+#biomes: $biome-distribution/presets/single.yml:biomes
+preset-single-biome: TEMPERATE_GRASSLAND
+
+# Single debug - Used for debugging a singular biome, should not be used for regular world generation
+#biomes: $biome-distribution/presets/single_debug.yml:biomes
+preset-single-debug-biome: TEMPERATE_GRASSLAND
+
+# ---
+# Population stages
+# ---
+# Here are the population stages that occur after the initial terrain
+# within a chunk is generated. Stages are ordered from top to bottom
+# chronologically, where the top stage is executed first.
+
+# If you wish to disable a generation stage, you can simply comment
+# it out by prepending it with #, this is useful if you want
+# something like a world without ores.
+
+stages:
+  # Used to generate lava at the bottom of the world.
+  # NOTE - This key must only be defined in biomes/abstract/base.yml
+  - id: global-preprocessors
+    type: FEATURE
+  
+  # Misc features that are treated as small modifications to the initial chunk generation.
+  - id: preprocessors
+    type: FEATURE
+
+  # Used for structures like mob rooms, desert wells, and fossils.
+  - id: structures
+    type: FEATURE
+  
+  # Used for things like boulders and features that act like a part of the terrain.
+  - id: landforms
+    type: FEATURE
+  
+  # Adds slab versions of some blocks to make terrain look smoother.
+  - id: slabs
+    type: FEATURE
+  
+  # Self-explanatory - used to generate ores.
+  # NOTE - Individual biomes should extend from configs in biomes/abstract/features/ores
+  #        rather than overwriting this key themselves.
+  - id: ores
+    type: FEATURE
+  
+  # Adds things like dirt, andesite and gravel patches.
+  # NOTE - Individual biomes should extend from configs in biomes/abstract/features/deposits
+  #        rather than overwriting this key themselves.
+  - id: deposits
+    type: FEATURE
+  
+  # Used for biome specific river variant features.
+  # NOTE - Individual biomes should extend from configs in biomes/abstract/features/river
+  #        rather than overwriting this key themselves.
+  - id: river-decoration
+    type: FEATURE
+  
+  # Used for larger things that generate on the surface like trees, some other features are
+  # also treated as trees like ice spikes.
+  - id: trees
+    type: FEATURE
+    blend:
+      amplitude: 30
+      sampler:
+        type: GAUSSIAN
+        salt: 2583
+
+  # Used to generate features that must come after trees and before flora such as snow forest layers
+  - id: processors
+    type: FEATURE
+
+  # Used for small features placed underwater like sea-grass.
+  - id: underwater-flora
+    type: FEATURE
+
+  # Used for small features placed on the surface like tall grass and vines.
+  - id: flora
+    type: FEATURE
+    blend:
+      amplitude: 30
+      sampler:
+        type: GAUSSIAN
+        salt: 2934
+  
+  # Used to generate features that must come after all other features, such as snow on trees.
+  - id: postprocessors
+    type: FEATURE
+
+functions:
+  "<<":
+    - math/functions/terrace.yml:functions
+    - math/functions/interpolation.yml:functions
+    - math/functions/maskSmooth.yml:functions
+    - math/functions/shelf.yml:functions
+
+samplers:
+  "<<":
+    - math/samplers/elevation.yml:samplers
+    - math/samplers/simplex.yml:samplers
+    - math/samplers/continents.yml:samplers
+    - math/samplers/precipitation.yml:samplers
+    - math/samplers/temperature.yml:samplers
+    - math/samplers/rivers.yml:samplers
+    - math/samplers/trenches.yml:samplers
+    - math/samplers/spots.yml:samplers
+
+slant:
+  calculation-method: DotProduct

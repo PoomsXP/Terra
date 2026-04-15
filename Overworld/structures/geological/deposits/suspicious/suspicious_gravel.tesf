@@ -1,0 +1,2 @@
+num random = randomInt(9);
+block(0, 0, 0, "minecraft:suspicious_gravel");

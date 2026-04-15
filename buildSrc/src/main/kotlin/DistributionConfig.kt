@@ -50,16 +50,30 @@ fun Project.configureDistribution() {
             try {
                 file("${buildDir}/resources/main/packs/").deleteRecursively()
                 file("${buildDir}/resources/main/metapacks/").deleteRecursively()
-                val overworldPackUrl =
-                    URL("https://github.com/PolyhedralDev/TerraOverworldConfig/releases/download/" + Versions.Terra.overworldConfig + "/Overworld.zip")
-                val reimagENDPackUrl =
-                    URL("https://github.com/PolyhedralDev/ReimagEND/releases/download/" + Versions.Terra.reimagENDConfig + "/ReimagEND.zip")
+
+                val localOverworldPack = rootProject.file("Overworld.zip")
+                val localReimagENDPack = rootProject.file("ReimagEND.zip")
+
+                if(localOverworldPack.isFile) {
+                    copyPack(localOverworldPack, project)
+                } else {
+                    val overworldPackUrl =
+                        URL("https://github.com/PolyhedralDev/TerraOverworldConfig/releases/download/" + Versions.Terra.overworldConfig + "/Overworld.zip")
+                    downloadPack(overworldPackUrl, project)
+                }
+
+                if(localReimagENDPack.isFile) {
+                    copyPack(localReimagENDPack, project)
+                } else {
+                    val reimagENDPackUrl =
+                        URL("https://github.com/PolyhedralDev/ReimagEND/releases/download/" + Versions.Terra.reimagENDConfig + "/ReimagEND.zip")
+                    downloadPack(reimagENDPackUrl, project)
+                }
+
                 val tartarusPackUrl =
                     URL("https://github.com/PolyhedralDev/Tartarus/releases/download/" + Versions.Terra.tartarusConfig + "/Tartarus.zip")
                 val defaultPackUrl =
                     URL("https://github.com/PolyhedralDev/DefaultMetapack/releases/download/" + Versions.Terra.defaultConfig + "/default.zip")
-                downloadPack(overworldPackUrl, project)
-                downloadPack(reimagENDPackUrl, project)
                 downloadPack(tartarusPackUrl, project)
                 downloadPack(defaultPackUrl, project, true)
             } catch (_: Exception) {
@@ -187,6 +201,13 @@ fun downloadPack(packUrl: URL, project: Project, metapack: Boolean = false) {
     val file = File("${project.buildDir}/resources/main/${resourceType}/${fileName}")
     file.parentFile.mkdirs()
     file.outputStream().write(packUrl.readBytes())
+}
+
+fun copyPack(packFile: File, project: Project, metapack: Boolean = false) {
+    val resourceType = if (metapack) "metapacks" else "packs"
+    val target = File("${project.buildDir}/resources/main/${resourceType}/${packFile.name}")
+    target.parentFile.mkdirs()
+    packFile.copyTo(target, overwrite = true)
 }
 
 fun Project.getJarTask() = tasks.named("shadowJar").get() as ShadowJar

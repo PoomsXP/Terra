@@ -1,0 +1,40 @@
+id: RED_WHITE_SANDY_GRASS_MIX
+type: PALETTE
+
+layers:
+  - materials:
+      - minecraft:grass_block: 3
+      - minecraft:red_sand: 1
+      - minecraft:sand: 2
+    layers: 1
+  - materials:
+      - minecraft:dirt: 3
+      - minecraft:red_sand: 1
+      - minecraft:sand: 2
+    layers: 2
+  - materials:
+      - minecraft:grass_block: 3
+      - minecraft:red_sandstone: 1
+      - minecraft:sandstone: 2
+    layers: 2
+  - materials:
+      - minecraft:stone: 1
+    layers: 1
+
+sampler:
+  dimensions: 2
+  type: DOMAIN_WARP
+  amplitude: 10
+  warp:
+    dimensions: 2
+    type: LINEAR
+    min: -1
+    max: 0.4
+    sampler:
+      type: CELLULAR
+      frequency: 0.08
+  sampler:
+    type: FBM
+    octaves: 3
+    sampler:
+      type: OPEN_SIMPLEX_2

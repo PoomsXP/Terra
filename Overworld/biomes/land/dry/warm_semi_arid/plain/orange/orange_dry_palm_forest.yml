@@ -1,0 +1,36 @@
+id: ORANGE_DRY_PALM_FOREST
+type: BIOME
+extends: DRY_PALM_FOREST
+color: $biomes/colors.yml:ORANGE_DRY_PALM_FOREST
+
+vanilla: minecraft:savanna
+
+tags:
+  - LAND_CAVES
+  - USE_ORANGE_DESERT_RIVER
+
+palette:
+  - RED_WHITE_SANDY_GRASS_MIX: $meta.yml:top-y
+  - << meta.yml:palette-underwater
+  - << meta.yml:palette-bottom
+
+slant-depth: 4
+
+slant:
+  - threshold: 0.8
+    palette:
+      - RED_WHITE_SANDY_GRASS_MIX: $meta.yml:top-y
+      - << meta.yml:palette-underwater
+      - << meta.yml:palette-bottom
+  - threshold: 0.5
+    palette:
+      - BLOCK:minecraft:mossy_cobblestone: $meta.yml:top-y
+      - << meta.yml:palette-bottom
+  - threshold: 0.45
+    palette:
+      - BLOCK:minecraft:cobblestone: $meta.yml:top-y
+      - << meta.yml:palette-bottom
+  - threshold: 0.4
+    palette:
+      - ORANGE_SAND_SLANT: $meta.yml:top-y
+      - << meta.yml:palette-bottom
